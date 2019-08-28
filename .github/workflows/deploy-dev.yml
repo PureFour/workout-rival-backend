@@ -1,0 +1,30 @@
+name: deploy on develop
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Copy file via scp
+        uses: appleboy/scp-action@master
+        env:
+          HOST: ${{ secrets.DEV_ENVIRONMENT_IP }}
+          USERNAME: ${{ secrets.DEV_ENVIRONMENT_USER }}
+          KEY: ${{ secrets.DEV_ENVIRONMENT_SSH_KEY }}
+        with:
+          source: "."
+          target: "/opt/app"
+
+      - name: Executing remote command
+        uses: appleboy/ssh-action@master
+        with:
+          HOST: ${{ secrets.DEV_ENVIRONMENT_IP }}
+          USERNAME: ${{ secrets.DEV_ENVIRONMENT_USER }}
+          KEY: ${{ secrets.DEV_ENVIRONMENT_SSH_KEY }}
+          script: ./deploy.sh develop

@@ -1,0 +1,37 @@
+version: "3"
+services:
+  workout-rival-service:
+    build: .
+    image: workout-rival-service:latest
+    depends_on:
+      - arangodb
+      - admin
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      ARANGO_ROOT_PASSWORD: "root"
+      SERVICE_EMAIL_PASSWORD: ${SERVICE_EMAIL_PASSWORD}
+    command: ["-c", "/opt/wait-for.sh arangodb:8529 && java -jar workoutRival.jar"]
+    entrypoint: ["/bin/sh"]
+    ports:
+      - "8080:8080"
+
+  arangodb:
+    image: arangodb:latest
+    restart:
+      always
+    environment:
+      ARANGO_ROOT_PASSWORD: "root"
+    ports:
+      - "8529:8529"
+
+  admin:
+    image: slydeveloper/spring-boot-admin:latest
+    environment:
+      SPRING_BOOT_ADMIN_USER_PASSWORD: "admin"
+    ports:
+      - "1111:1111"
+    healthcheck:
+      test: "curl -sS http://localhost:1111/health"
+      interval: 1s
+      timeout: 60s
+      retries: 120
