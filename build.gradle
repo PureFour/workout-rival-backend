@@ -8,6 +8,7 @@ buildscript {
 plugins {
     id 'org.springframework.boot' version '2.2.1.RELEASE'
     id 'java'
+    id 'maven'
 }
 
 configurations {
@@ -34,12 +35,17 @@ repositories {
     mavenCentral()
     jcenter()
     maven {
-        url "https://mymavenrepo.com/repo/tL5TrXOUxwJdrf1R1kIu/"
+        name = "GitHubPackages"
+        url = "https://maven.pkg.github.com/PureFour/workout-rival-common-data"
+        credentials {
+            username = project.findProperty("GITHUB_ACTOR") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("GITHUB_TOKEN") ?: System.getenv("GITHUB_TOKEN")
+        }
     }
 }
 
 dependencies {
-    implementation 'com.ruczajsoftware.workoutrival:common-data:0.0.17'
+    implementation 'com.ruczajsoftware.workoutrival:workout-rival-common-data:1.0.0'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
