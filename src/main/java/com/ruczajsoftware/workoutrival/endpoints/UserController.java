@@ -13,11 +13,22 @@ import com.ruczajsoftware.workoutrival.model.web.CreateUserRequest;
 import com.ruczajsoftware.workoutrival.model.web.UpdateUserPasswordRequest;
 import com.ruczajsoftware.workoutrival.service.AuthorizationService;
 import com.ruczajsoftware.workoutrival.service.UserService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @RestController
@@ -125,5 +136,19 @@ public class UserController {
     @PutMapping("personalData")
     public void updatePersonalData(@RequestParam String email, @RequestBody PersonalData personalData) throws BadRequestException, EntityNotFoundException {
         userService.updateUserPersonalData(email, personalData);
+    }
+
+    @ApiOperation(value = "Get user BMI")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 400, message = "User data invalid", response = BadRequestException.class),
+            @ApiResponse(code = 404, message = "User not found!", response = EntityNotFoundException.class)
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization token (starts with 'Bearer')", dataType = "string", paramType = "header", required = true) })
+    @GetMapping("getBMI")
+    public ResponseEntity<Float> getUserBMI(@RequestParam String username) throws EntityNotFoundException {
+        User user = userService.getUserByUsername(username);
+        return ResponseEntity.ok(userService.calculateBMIByPersonalData(user.getPersonalData()));
     }
 }

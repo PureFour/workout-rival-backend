@@ -78,3 +78,9 @@ email:
   username: workoutrivalservice@gmail.com
   password: ${SERVICE_EMAIL_PASSWORD}
 ---
+
+spring:
+  profiles:
+    active: test
+
+arangoConfig: false

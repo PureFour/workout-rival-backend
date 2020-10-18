@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.ruczajsoftware.workoutrival:workout-rival-common-data:1.0.0'
+    implementation 'com.ruczajsoftware.workoutrival:workout-rival-common-data:1.0.1'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
