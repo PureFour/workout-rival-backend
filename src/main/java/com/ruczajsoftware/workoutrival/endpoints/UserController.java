@@ -49,7 +49,7 @@ public class UserController {
     public ResponseEntity<AuthenticationResponse> postUser(@RequestBody CreateUserRequest createUserRequest) throws EntityConflictException, BadRequestException, UnauthorizedException, EntityNotFoundException {
         userService.addUser(createUserRequest);
         final AuthenticationRequest authenticationRequest = new AuthenticationRequestBuilder()
-                .email(createUserRequest.getUsername())
+                .login(createUserRequest.getUsername())
                 .password(createUserRequest.getPassword())
                 .build();
         return ResponseEntity.ok(authorizationService.authenticateUser(authenticationRequest));
