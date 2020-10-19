@@ -1,13 +1,11 @@
 package com.ruczajsoftware.workoutrival.endpoints;
 
 import com.ruczajsoftware.workoutrival.model.database.PersonalData;
-import com.ruczajsoftware.workoutrival.model.database.TrainingModel;
-import com.ruczajsoftware.workoutrival.model.database.TrainingPlan;
 import com.ruczajsoftware.workoutrival.model.database.User;
 import com.ruczajsoftware.workoutrival.model.database.UserBuilder;
 import com.ruczajsoftware.workoutrival.service.AuthorizationService;
-import com.ruczajsoftware.workoutrival.service.util.JwtUtil;
 import com.ruczajsoftware.workoutrival.service.UserService;
+import com.ruczajsoftware.workoutrival.service.util.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

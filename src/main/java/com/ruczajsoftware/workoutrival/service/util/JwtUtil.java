@@ -26,7 +26,7 @@ public class JwtUtil {
     }
 
     public String generateToken(User user) {
-        return createToken(user.getEmail());
+        return createToken(user.getUsername());
     }
 
     private String createToken(String subject) {

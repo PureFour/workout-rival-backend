@@ -1,7 +1,7 @@
 package com.ruczajsoftware.workoutrival.config;
 
-import com.ruczajsoftware.workoutrival.service.util.JwtUtil;
 import com.ruczajsoftware.workoutrival.service.UserService;
+import com.ruczajsoftware.workoutrival.service.util.JwtUtil;
 import io.netty.util.internal.StringUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

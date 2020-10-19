@@ -1,14 +1,14 @@
 package com.ruczajsoftware.workoutrival.endpoints;
 
+import com.ruczajsoftware.workoutrival.model.authentication.AuthenticationRequest;
 import com.ruczajsoftware.workoutrival.model.authentication.AuthenticationRequestBuilder;
+import com.ruczajsoftware.workoutrival.model.authentication.AuthenticationResponse;
 import com.ruczajsoftware.workoutrival.model.database.PersonalData;
+import com.ruczajsoftware.workoutrival.model.database.User;
 import com.ruczajsoftware.workoutrival.model.exceptions.BadRequestException;
 import com.ruczajsoftware.workoutrival.model.exceptions.EntityConflictException;
 import com.ruczajsoftware.workoutrival.model.exceptions.EntityNotFoundException;
 import com.ruczajsoftware.workoutrival.model.exceptions.UnauthorizedException;
-import com.ruczajsoftware.workoutrival.model.authentication.AuthenticationRequest;
-import com.ruczajsoftware.workoutrival.model.authentication.AuthenticationResponse;
-import com.ruczajsoftware.workoutrival.model.database.User;
 import com.ruczajsoftware.workoutrival.model.web.CreateUserRequest;
 import com.ruczajsoftware.workoutrival.model.web.UpdateUserPasswordRequest;
 import com.ruczajsoftware.workoutrival.service.AuthorizationService;
@@ -49,7 +49,7 @@ public class UserController {
     public ResponseEntity<AuthenticationResponse> postUser(@RequestBody CreateUserRequest createUserRequest) throws EntityConflictException, BadRequestException, UnauthorizedException, EntityNotFoundException {
         userService.addUser(createUserRequest);
         final AuthenticationRequest authenticationRequest = new AuthenticationRequestBuilder()
-                .email(createUserRequest.getEmail())
+                .email(createUserRequest.getUsername())
                 .password(createUserRequest.getPassword())
                 .build();
         return ResponseEntity.ok(authorizationService.authenticateUser(authenticationRequest));

@@ -29,8 +29,8 @@ public class UserService implements UserDetailsService {
     private final PinService pinService;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
             return mapUserToUserDetails(user.get());
         }
@@ -69,7 +69,6 @@ public class UserService implements UserDetailsService {
             throw new EntityConflictException(ExceptionMessages.PASSWORD_CONFLICT);
         }
         user.setPassword(updateUserPasswordRequest.getNewPassword());
-        userRepository.deleteUserByEmail(updateUserPasswordRequest.getEmail());
         userRepository.save(user);
     }
 
@@ -80,7 +79,6 @@ public class UserService implements UserDetailsService {
             throw new EntityConflictException(ExceptionMessages.EMAIL_CONFLICT);
         }
         user.setEmail(email);
-        userRepository.deleteUserByUsername(username);
         userRepository.save(user);
     }
 
@@ -88,7 +86,6 @@ public class UserService implements UserDetailsService {
         validateEmail(email);
         User user = this.getUserByEmail(email);
         user.setPersonalData(personalData);
-        userRepository.deleteUserByEmail(email);
         userRepository.save(user);
     }
 
@@ -109,7 +106,7 @@ public class UserService implements UserDetailsService {
 
     private UserDetails mapUserToUserDetails(User user) {
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getPassword(), new ArrayList<>());
+                user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 
     private User mapCreateUserRequestToUser(CreateUserRequest createUserRequest) throws BadRequestException {
@@ -131,6 +128,12 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException("User data invalid");
         }
         return weight / (height * height);
+    }
+
+    public User getUserByUsernameOrEmail(String login) {
+        return userRepository.findByUsername(login).orElseGet(() ->
+                userRepository.findByEmail(login).orElseThrow(() ->
+                        new UsernameNotFoundException(ExceptionMessages.USER_NOT_FOUND.getMsg())));
     }
 
 }
