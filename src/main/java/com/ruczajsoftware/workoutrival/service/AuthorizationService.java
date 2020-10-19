@@ -27,8 +27,7 @@ public class AuthorizationService {
 
 		final User user;
 		try {
-			//TODO rename field email in AuthenticationRequest class
-			user = userService.getUserByUsernameOrEmail(authRequest.getEmail());
+			user = userService.getUserByUsernameOrEmail(authRequest.getLogin());
 			final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 					user.getUsername(), authRequest.getPassword());
 			authenticationManager.authenticate(authenticationToken);
